@@ -1,12 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Elements Design Studios</title>
+  <meta name="description" content="Elements Design Studios — 559.237.3779 / design@elementsdesignstudios.com" />
+
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" href="assets/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="Elements Design Studios" />
+  <meta property="og:title" content="Elements Design Studios" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://elementsdesignstudios.com" />
+  <meta property="og:description" content="559.237.3779 / design@elementsdesignstudios.com" />
+  <meta property="og:image" content="assets/elements-logo.png" />
+
+  <link rel="stylesheet" href="https://fonts.bunny.net/css?family=open-sans:300,400,600" />
+
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #a5b721;
+      color: #ffffff;
+      font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      font-weight: 400;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100svh; /* svh avoids mobile browser-bar jump; vh fallback below */
+      text-align: center;
+      /* respect notches/safe areas on phones */
+      padding:
+        max(3vh, env(safe-area-inset-top))
+        max(16px, env(safe-area-inset-right))
+        max(3vh, env(safe-area-inset-bottom))
+        max(16px, env(safe-area-inset-left));
+    }
+    .logo {
+      width: min(82vw, 1000px);   /* close to the original on-screen scale */
+      height: auto;               /* preserve the image's natural aspect ratio */
+      max-height: 58vh;           /* keep the logo + text on one screen */
+      display: block;
+      margin: 0 auto clamp(24px, 4vw, 48px);
+    }
+    .description {
+      max-width: 42rem;
+    }
+    .description p {
+      font-size: clamp(15px, 3.1vw, 19px);
+      line-height: 1.35;
+      letter-spacing: 0.01em;
+      margin: 0;
+    }
+    .description .contact {
+      margin-top: 0.4em;
+    }
+    .description a {
+      color: #ffffff;
+      text-decoration: none;
+      /* comfortable tap target on touch screens */
+      display: inline-block;
+      padding: 1px 0;
+    }
+    .description a:hover { text-decoration: underline; }
+    footer {
+      margin-top: clamp(20px, 4vw, 36px);
+      font-size: clamp(12px, 2.5vw, 14px);
+      font-weight: 300;
+      color: #ffffff;
+    }
+    /* Fade the logo and text up from the background once loaded (1s) */
+    .logo, .description, footer {
+      opacity: 0;
+      transition: opacity 1s ease-in;
+    }
+    body.loaded .logo,
+    body.loaded .description,
+    body.loaded footer {
+      opacity: 1;
+    }
+    /* Safety: if JS is disabled, never leave content hidden */
+    .no-js .logo, .no-js .description, .no-js footer { opacity: 1; }
+    /* Fallback for browsers without svh support */
+    @supports not (height: 100svh) {
+      body { min-height: 100vh; }
+    }
+    /* Phones in landscape: tighten vertical space so the logo still fits */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body { padding-top: 12px; padding-bottom: 12px; }
+      .logo { max-width: 720px; margin-bottom: 10px; }
+      footer { margin-top: 14px; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Elements Design Studios</h1>
-  <p>Coming soon.</p>
+  <header>
+    <img class="logo" src="assets/elements-logo.png"
+         alt="Elements Design Studios"
+         width="998" height="434" />
+  </header>
+
+  <main class="description">
+    <p class="phone"><a href="tel:+15592373779">559.237.3779</a></p>
+    <p class="contact"><a href="mailto:design@elementsdesignstudios.com">design@elementsdesignstudios.com</a></p>
+  </main>
+
+  <footer>
+    &copy; Elements Design Studios <span id="year"></span>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Reveal (fade in) once the page — including the logo image — has loaded.
+    // Double rAF guarantees the browser paints the opacity:0 state first so the
+    // transition to opacity:1 actually animates.
+    function reveal() {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          document.body.classList.add("loaded");
+        });
+      });
+    }
+    if (document.readyState === "complete") {
+      reveal();
+    } else {
+      window.addEventListener("load", reveal);
+    }
+    // Safety net so content always appears even if the load event is delayed.
+    setTimeout(function () { document.body.classList.add("loaded"); }, 3000);
+  </script>
 </body>
 </html>
